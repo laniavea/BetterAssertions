@@ -84,3 +84,38 @@ macro_rules! slow_assert_eq {
         $crate::__simple_assert_eq!($cond, $other_cond, $crate::assertions::AssertionLevel::Slow)
     };
 }
+
+#[macro_export]
+macro_rules! assert_some {
+    ($cond:expr) => {
+        $crate::__simple_assert!($cond.is_some(), $crate::assertions::AssertionLevel::Instant)
+    };
+}
+
+#[macro_export]
+macro_rules! assert_none {
+    ($cond:expr) => {
+        $crate::__simple_assert!($cond.is_none(), $crate::assertions::AssertionLevel::Instant)
+    };
+}
+
+#[macro_export]
+macro_rules! assert_ok {
+    ($cond:expr) => {
+        $crate::__simple_assert!($cond.is_ok(), $crate::assertions::AssertionLevel::Instant)
+    };
+}
+
+#[macro_export]
+macro_rules! assert_err {
+    ($cond:expr) => {
+        $crate::__simple_assert!($cond.is_err(), $crate::assertions::AssertionLevel::Instant)
+    };
+}
+
+#[macro_export]
+macro_rules! assert_var {
+    ($cond:expr, $var:pat) => {
+        $crate::__simple_assert!(matches!($cond, $var), $crate::assertions::AssertionLevel::Instant)
+    };
+}
