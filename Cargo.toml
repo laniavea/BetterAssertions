@@ -1,0 +1,18 @@
+[package]
+name = "better_assertions"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+debug_max_level_off = []
+debug_max_level_instant = []
+debug_max_level_fast = []
+debug_max_level_moderate = []
+debug_max_level_slow = []
+max_level_off = []
+max_level_instant = []
+max_level_fast = []
+max_level_moderate = []
+max_level_slow = []
+
+[dependencies]

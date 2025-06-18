@@ -1,0 +1,8 @@
+[package]
+name = "better_assertions_playground"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+better_assertions = {path = "../", version = "0.1.0", features = ["debug_max_level_fast"]}
+
