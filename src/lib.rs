@@ -56,3 +56,13 @@ impl BasicStore {
         self.assertions.clone()
     }
 }
+
+impl AssertionInfo {
+    pub fn number_of_calls(&self) -> u32 {
+        self.times
+    }
+
+    pub fn level(&self) -> AssertionLevel {
+        self.level
+    }
+}
