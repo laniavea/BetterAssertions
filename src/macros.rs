@@ -37,7 +37,6 @@ macro_rules! inst_assert {
     ($cond:expr, $assert_id:expr) => {
         $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Instant);
         if $crate::assertions::COLLECT_STATS {
-            $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Instant);
             let mut st = $crate::basic_store().lock().unwrap();
             st.store($assert_id, $crate::assertions::AssertionLevel::Instant);
         }
@@ -52,7 +51,6 @@ macro_rules! fast_assert {
     ($cond:expr, $assert_id:expr) => {
         $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Fast);
         if $crate::assertions::COLLECT_STATS {
-            $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Fast);
             let mut st = $crate::basic_store().lock().unwrap();
             st.store($assert_id, $crate::assertions::AssertionLevel::Fast);
         }
@@ -67,7 +65,6 @@ macro_rules! moderate_assert {
     ($cond:expr, $assert_id:expr) => {
         $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Moderate);
         if $crate::assertions::COLLECT_STATS {
-            $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Moderate);
             let mut st = $crate::basic_store().lock().unwrap();
             st.store($assert_id, $crate::assertions::AssertionLevel::Moderate);
         }
@@ -82,7 +79,6 @@ macro_rules! slow_assert {
     ($cond:expr, $assert_id:expr) => {
         $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Slow);
         if $crate::assertions::COLLECT_STATS {
-            $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Slow);
             let mut st = $crate::basic_store().lock().unwrap();
             st.store($assert_id, $crate::assertions::AssertionLevel::Slow);
         }
@@ -97,7 +93,6 @@ macro_rules! inst_assert_eq {
     ($cond:expr, $other_cond:expr, $assert_id:expr) => {
         $crate::__simple_assert_eq!($cond, $other_cond, $crate::assertions::AssertionLevel::Instant);
         if $crate::assertions::COLLECT_STATS {
-            $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Instant);
             let mut st = $crate::basic_store().lock().unwrap();
             st.store($assert_id, $crate::assertions::AssertionLevel::Instant);
         }
@@ -112,7 +107,6 @@ macro_rules! fast_assert_eq {
     ($cond:expr, $other_cond:expr, $assert_id:expr) => {
         $crate::__simple_assert_eq!($cond, $other_cond, $crate::assertions::AssertionLevel::Fast);
         if $crate::assertions::COLLECT_STATS {
-            $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Fast);
             let mut st = $crate::basic_store().lock().unwrap();
             st.store($assert_id, $crate::assertions::AssertionLevel::Fast);
         }
@@ -127,7 +121,6 @@ macro_rules! moderate_assert_eq {
     ($cond:expr, $other_cond:expr, $assert_id:expr) => {
         $crate::__simple_assert_eq!($cond, $other_cond, $crate::assertions::AssertionLevel::Moderate);
         if $crate::assertions::COLLECT_STATS {
-            $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Moderate);
             let mut st = $crate::basic_store().lock().unwrap();
             st.store($assert_id, $crate::assertions::AssertionLevel::Moderate);
         }
@@ -142,7 +135,6 @@ macro_rules! slow_assert_eq {
     ($cond:expr, $other_cond:expr, $assert_id:expr) => {
         $crate::__simple_assert_eq!($cond, $other_cond, $crate::assertions::AssertionLevel::Slow);
         if $crate::assertions::COLLECT_STATS {
-            $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Slow);
             let mut st = $crate::basic_store().lock().unwrap();
             st.store($assert_id, $crate::assertions::AssertionLevel::Slow);
         }
