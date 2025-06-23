@@ -1,4 +1,4 @@
-mod assertions;
+pub mod assertions;
 mod macros;
 
 #[derive(Debug, Eq, PartialEq)]

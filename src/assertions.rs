@@ -67,7 +67,6 @@ impl PartialOrd<AssertionLevel> for AssertionLevelFilter {
     }
 }
 
-
 pub const STATIC_MAX_LEVEL: AssertionLevelFilter = match cfg!(debug_assertions) {
     true if cfg!(feature = "debug_max_level_off") => AssertionLevelFilter::Off,
     true if cfg!(feature = "debug_max_level_instant") => AssertionLevelFilter::Instant,
@@ -80,4 +79,9 @@ pub const STATIC_MAX_LEVEL: AssertionLevelFilter = match cfg!(debug_assertions) 
     false if cfg!(feature = "max_level_moderate") => AssertionLevelFilter::Moderate,
     false if cfg!(feature = "max_level_slow") => AssertionLevelFilter::Slow,
     _ => AssertionLevelFilter::Slow
+};
+
+pub const COLLECT_STATS: bool = match cfg!(debug_assertions) {
+    true => cfg!(feature = "debug_collect_stats"),
+    false => cfg!(feature = "collect_stats"),
 };

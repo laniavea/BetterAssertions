@@ -1,6 +1,6 @@
 [package]
 name = "better_assertions"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 
 [features]
@@ -14,5 +14,7 @@ max_level_instant = []
 max_level_fast = []
 max_level_moderate = []
 max_level_slow = []
+debug_collect_stats = []
+collect_stats = []
 
 [dependencies]
