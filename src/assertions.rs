@@ -1,7 +1,5 @@
 use std::cmp;
 
-static ASSERTION_LEVEL_NAMES: [&str; 5] = ["OFF", "INSTANT", "FAST", "MODERATE", "SLOW"];
-
 /// An enum representing the available levels of assertions difficulty
 #[repr(usize)]
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Ord, PartialOrd, Hash)]
@@ -67,6 +65,34 @@ impl PartialOrd<AssertionLevel> for AssertionLevelFilter {
     }
 }
 
+/// An enum represents level of assertion to store values
+#[repr(usize)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq, Ord, PartialOrd, Hash)]
+pub enum StoreLevel {
+    /// A level to store all assertions with ids
+    Instant = 1,
+    /// A level to store fast and slower assertions with ids
+    Fast,
+    /// A level to store moderate and slower assertions with ids
+    Moderate,
+    /// A level to store only slow assertions with ids
+    Slow,
+    /// A level to turn off assertion info
+    Off,
+}
+
+impl PartialEq<AssertionLevel> for StoreLevel {
+    fn eq(&self, other: &AssertionLevel) -> bool {
+        *self as usize == *other as usize
+    }
+}
+
+impl PartialOrd<AssertionLevel> for StoreLevel {
+    fn partial_cmp(&self, other: &AssertionLevel) -> Option<cmp::Ordering> {
+        Some((*self as usize).cmp(&(*other as usize)))
+    }
+}
+
 pub const STATIC_MAX_LEVEL: AssertionLevelFilter = match cfg!(debug_assertions) {
     true if cfg!(feature = "debug_max_level_off") => AssertionLevelFilter::Off,
     true if cfg!(feature = "debug_max_level_instant") => AssertionLevelFilter::Instant,
@@ -81,7 +107,16 @@ pub const STATIC_MAX_LEVEL: AssertionLevelFilter = match cfg!(debug_assertions) 
     _ => AssertionLevelFilter::Slow
 };
 
-pub const COLLECT_STATS: bool = match cfg!(debug_assertions) {
-    true => cfg!(feature = "debug_collect_stats"),
-    false => cfg!(feature = "collect_stats"),
+pub const COLLECT_STATS_LVL: StoreLevel = match cfg!(debug_assertions) {
+    true if cfg!(feature = "debug_store_level_off") => StoreLevel::Off,
+    true if cfg!(feature = "debug_store_level_instant") => StoreLevel::Instant,
+    true if cfg!(feature = "debug_store_level_fast") => StoreLevel::Fast,
+    true if cfg!(feature = "debug_store_level_moderate") => StoreLevel::Moderate,
+    true if cfg!(feature = "debug_store_level_slow") => StoreLevel::Slow,
+    false if cfg!(feature = "store_level_off") => StoreLevel::Off,
+    false if cfg!(feature = "store_level_instant") => StoreLevel::Instant,
+    false if cfg!(feature = "store_level_fast") => StoreLevel::Fast,
+    false if cfg!(feature = "store_level_moderate") => StoreLevel::Moderate,
+    false if cfg!(feature = "store_level_slow") => StoreLevel::Slow,
+    _ => StoreLevel::Off,
 };
