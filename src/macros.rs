@@ -21,7 +21,7 @@ macro_rules! __simple_assert_eq {
         if __lvl <= $crate::assertions::STATIC_MAX_LEVEL {
             if $cond != $sec_cond {
                 panic!(
-                    "Assertion failed"
+                    "Assertion failed! Got: {:?}, Expected: {:?}", $cond, $sec_cond
                 );
             }
         }
@@ -29,6 +29,7 @@ macro_rules! __simple_assert_eq {
 }
 
 
+/// Do standart assertion with level: Instant
 #[macro_export]
 macro_rules! inst_assert {
     ($cond:expr) => {
@@ -44,6 +45,7 @@ macro_rules! inst_assert {
     };
 }
 
+/// Do standart assertion with level: Fast
 #[macro_export]
 macro_rules! fast_assert {
     ($cond:expr) => {
@@ -59,6 +61,7 @@ macro_rules! fast_assert {
     };
 }
 
+/// Do standart assertion with level: Moderate
 #[macro_export]
 macro_rules! moderate_assert {
     ($cond:expr) => {
@@ -74,6 +77,7 @@ macro_rules! moderate_assert {
     };
 }
 
+/// Do standart assertion with level: Slow
 #[macro_export]
 macro_rules! slow_assert {
     ($cond:expr) => {
@@ -89,6 +93,7 @@ macro_rules! slow_assert {
     };
 }
 
+/// Do equality assertion with level: Instant
 #[macro_export]
 macro_rules! inst_assert_eq {
     ($cond:expr, $other_cond:expr) => {
@@ -104,6 +109,7 @@ macro_rules! inst_assert_eq {
     };
 }
 
+/// Do equality assertion with level: Fast
 #[macro_export]
 macro_rules! fast_assert_eq {
     ($cond:expr, $other_cond:expr) => {
@@ -119,6 +125,7 @@ macro_rules! fast_assert_eq {
     };
 }
 
+/// Do equality assertion with level: Moderate
 #[macro_export]
 macro_rules! moderate_assert_eq {
     ($cond:expr, $other_cond:expr) => {
@@ -134,6 +141,7 @@ macro_rules! moderate_assert_eq {
     };
 }
 
+/// Do equality assertion with level: Slow
 #[macro_export]
 macro_rules! slow_assert_eq {
     ($cond:expr, $other_cond:expr) => {
@@ -149,6 +157,7 @@ macro_rules! slow_assert_eq {
     };
 }
 
+/// Do Some(T) assertion at level Instant
 #[macro_export]
 macro_rules! assert_some {
     ($cond:expr) => {
@@ -156,6 +165,7 @@ macro_rules! assert_some {
     };
 }
 
+/// Do None assertion at level Instant
 #[macro_export]
 macro_rules! assert_none {
     ($cond:expr) => {
@@ -163,6 +173,7 @@ macro_rules! assert_none {
     };
 }
 
+/// Do Ok(T) assertion at level Instant
 #[macro_export]
 macro_rules! assert_ok {
     ($cond:expr) => {
@@ -170,6 +181,7 @@ macro_rules! assert_ok {
     };
 }
 
+/// Do Err(T) assertion at level Instant
 #[macro_export]
 macro_rules! assert_err {
     ($cond:expr) => {
@@ -177,6 +189,7 @@ macro_rules! assert_err {
     };
 }
 
+/// Do Enum(T) assertion at level Instant
 #[macro_export]
 macro_rules! assert_var {
     ($cond:expr, $var:pat) => {

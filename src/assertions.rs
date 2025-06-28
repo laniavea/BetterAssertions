@@ -77,7 +77,7 @@ pub enum StoreLevel {
     Moderate,
     /// A level to store only slow assertions with ids
     Slow,
-    /// A level to turn off assertion info
+    /// A level to turn off assertion info store
     Off,
 }
 
@@ -93,6 +93,7 @@ impl PartialOrd<AssertionLevel> for StoreLevel {
     }
 }
 
+/// Compile-calculated value to determine level of assertions to do
 pub const STATIC_MAX_LEVEL: AssertionLevelFilter = match cfg!(debug_assertions) {
     true if cfg!(feature = "debug_max_level_off") => AssertionLevelFilter::Off,
     true if cfg!(feature = "debug_max_level_instant") => AssertionLevelFilter::Instant,
@@ -107,6 +108,7 @@ pub const STATIC_MAX_LEVEL: AssertionLevelFilter = match cfg!(debug_assertions) 
     _ => AssertionLevelFilter::Slow
 };
 
+/// Compile-calculated value to determine level of assertions to store stats
 pub const COLLECT_STATS_LVL: StoreLevel = match cfg!(debug_assertions) {
     true if cfg!(feature = "debug_store_level_off") => StoreLevel::Off,
     true if cfg!(feature = "debug_store_level_instant") => StoreLevel::Instant,

@@ -38,7 +38,7 @@ fn multithreading_test() {
     use std::thread;
     basic_store().lock().unwrap().clear();
 
-    const NUM_THREADS: usize = 1;
+    const NUM_THREADS: usize = 8;
     const ASSERTIONS_PER_THREAD: usize = 1_000_000;
     const SHARED_ASSERT_ID: u32 = 42;
 
@@ -47,7 +47,7 @@ fn multithreading_test() {
     for i in 0..NUM_THREADS {
         let handle = thread::spawn(move || {
             for _ in 0..ASSERTIONS_PER_THREAD {
-                slow_assert!(true, SHARED_ASSERT_ID);
+                inst_assert!(true, SHARED_ASSERT_ID);
             }
             println!("Thread {i} finished");
         });
