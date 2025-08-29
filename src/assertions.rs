@@ -11,11 +11,12 @@ pub enum AssertionLevel {
     Instant = 1,
     /// The "fast" level.
     ///
-    /// Level designed for checks that can take microseconds to complete.
+    /// Level designed for checks that can be executed unnoticably for program, but such assertions
+    /// are slower than instant or can be called a lot of times
     Fast,
     /// The "moderate" level.
     ///
-    /// Level designed for checks that can take millyseconds to complete. Should be used when data
+    /// Level designed for checks that can take microseconds to complete. Should be used when data
     /// size can be large, but not supposed to be
     Moderate,
     /// The "slow" level.
@@ -65,34 +66,6 @@ impl PartialOrd<AssertionLevel> for AssertionLevelFilter {
     }
 }
 
-/// An enum represents level of assertion to store values
-#[repr(usize)]
-#[derive(Debug, Clone, Copy, Eq, PartialEq, Ord, PartialOrd, Hash)]
-pub enum StoreLevel {
-    /// A level to store all assertions with ids
-    Instant = 1,
-    /// A level to store fast and slower assertions with ids
-    Fast,
-    /// A level to store moderate and slower assertions with ids
-    Moderate,
-    /// A level to store only slow assertions with ids
-    Slow,
-    /// A level to turn off assertion info store
-    Off,
-}
-
-impl PartialEq<AssertionLevel> for StoreLevel {
-    fn eq(&self, other: &AssertionLevel) -> bool {
-        *self as usize == *other as usize
-    }
-}
-
-impl PartialOrd<AssertionLevel> for StoreLevel {
-    fn partial_cmp(&self, other: &AssertionLevel) -> Option<cmp::Ordering> {
-        Some((*self as usize).cmp(&(*other as usize)))
-    }
-}
-
 /// Compile-calculated value to determine level of assertions to do
 pub const STATIC_MAX_LEVEL: AssertionLevelFilter = match cfg!(debug_assertions) {
     true if cfg!(feature = "debug_max_level_off") => AssertionLevelFilter::Off,
@@ -106,19 +79,4 @@ pub const STATIC_MAX_LEVEL: AssertionLevelFilter = match cfg!(debug_assertions) 
     false if cfg!(feature = "max_level_moderate") => AssertionLevelFilter::Moderate,
     false if cfg!(feature = "max_level_slow") => AssertionLevelFilter::Slow,
     _ => AssertionLevelFilter::Slow
-};
-
-/// Compile-calculated value to determine level of assertions to store stats
-pub const COLLECT_STATS_LVL: StoreLevel = match cfg!(debug_assertions) {
-    true if cfg!(feature = "debug_store_level_off") => StoreLevel::Off,
-    true if cfg!(feature = "debug_store_level_instant") => StoreLevel::Instant,
-    true if cfg!(feature = "debug_store_level_fast") => StoreLevel::Fast,
-    true if cfg!(feature = "debug_store_level_moderate") => StoreLevel::Moderate,
-    true if cfg!(feature = "debug_store_level_slow") => StoreLevel::Slow,
-    false if cfg!(feature = "store_level_off") => StoreLevel::Off,
-    false if cfg!(feature = "store_level_instant") => StoreLevel::Instant,
-    false if cfg!(feature = "store_level_fast") => StoreLevel::Fast,
-    false if cfg!(feature = "store_level_moderate") => StoreLevel::Moderate,
-    false if cfg!(feature = "store_level_slow") => StoreLevel::Slow,
-    _ => StoreLevel::Off,
 };

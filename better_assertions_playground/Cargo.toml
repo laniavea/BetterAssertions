@@ -4,5 +4,5 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-better_assertions = {path = "../", version = "0.1.2", features = ["debug_max_level_slow", "debug_store_level_instant"]}
+better_assertions = {path = "../", version = "0.1.2", features = ["debug_max_level_moderate"]}
 

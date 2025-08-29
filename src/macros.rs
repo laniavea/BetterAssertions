@@ -6,7 +6,19 @@ macro_rules! __simple_assert {
         if __lvl <= $crate::assertions::STATIC_MAX_LEVEL {
             if !$cond {
                 panic!(
-                    "Assertion failed"
+                    "Assertion failed, got False"
+                );
+            }
+        }
+    };
+
+    ($cond:expr, $lvl:expr, $($msg:tt)+) => {
+        let __lvl = $lvl;
+
+        if __lvl <= $crate::assertions::STATIC_MAX_LEVEL {
+            if !$cond {
+                panic!(
+                    $($msg)+
                 );
             }
         }
@@ -26,6 +38,45 @@ macro_rules! __simple_assert_eq {
             }
         }
     };
+
+    ($cond:expr, $sec_cond:expr, $lvl:expr, $($msg:tt)+) => {
+        let __lvl = $lvl;
+
+        if __lvl <= $crate::assertions::STATIC_MAX_LEVEL {
+            if $cond != $sec_cond {
+                panic!(
+                    $($msg)+
+                );
+            }
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! __simple_assert_ne {
+    ($cond:expr, $sec_cond:expr, $lvl:expr) => {
+        let __lvl = $lvl;
+
+        if __lvl <= $crate::assertions::STATIC_MAX_LEVEL {
+            if $cond == $sec_cond {
+                panic!(
+                    "Assertion failed! Got: {:?}, Expected: {:?}", $cond, $sec_cond
+                );
+            }
+        }
+    };
+
+    ($cond:expr, $sec_cond:expr, $lvl:expr, $($msg:tt)+) => {
+        let __lvl = $lvl;
+
+        if __lvl <= $crate::assertions::STATIC_MAX_LEVEL {
+            if $cond == $sec_cond {
+                panic!(
+                    $($msg)+
+                );
+            }
+        }
+    };
 }
 
 
@@ -35,13 +86,8 @@ macro_rules! inst_assert {
     ($cond:expr) => {
         $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Instant)
     };
-    ($cond:expr, $assert_id:expr) => {
-        let this_level = $crate::assertions::AssertionLevel::Instant;
-        $crate::__simple_assert!($cond, this_level);
-        if $crate::assertions::COLLECT_STATS_LVL <= this_level {
-            let mut st = $crate::basic_store().lock().unwrap();
-            st.store($assert_id, this_level);
-        }
+    ($cond:expr, $($msg:tt)+) => {
+        $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Instant, $($msg)+)
     };
 }
 
@@ -51,13 +97,8 @@ macro_rules! fast_assert {
     ($cond:expr) => {
         $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Fast)
     };
-    ($cond:expr, $assert_id:expr) => {
-        let this_level = $crate::assertions::AssertionLevel::Fast;
-        $crate::__simple_assert!($cond, this_level);
-        if $crate::assertions::COLLECT_STATS_LVL <= this_level {
-            let mut st = $crate::basic_store().lock().unwrap();
-            st.store($assert_id, this_level);
-        }
+    ($cond:expr, $($msg:tt)+) => {
+        $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Fast, $($msg)+)
     };
 }
 
@@ -67,13 +108,8 @@ macro_rules! moderate_assert {
     ($cond:expr) => {
         $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Moderate)
     };
-    ($cond:expr, $assert_id:expr) => {
-        let this_level = $crate::assertions::AssertionLevel::Moderate;
-        $crate::__simple_assert!($cond, this_level);
-        if $crate::assertions::COLLECT_STATS_LVL <= this_level {
-            let mut st = $crate::basic_store().lock().unwrap();
-            st.store($assert_id, this_level);
-        }
+    ($cond:expr, $($msg:tt)+) => {
+        $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Moderate, $($msg)+)
     };
 }
 
@@ -83,13 +119,8 @@ macro_rules! slow_assert {
     ($cond:expr) => {
         $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Slow)
     };
-    ($cond:expr, $assert_id:expr) => {
-        let this_level = $crate::assertions::AssertionLevel::Slow;
-        $crate::__simple_assert!($cond, this_level);
-        if $crate::assertions::COLLECT_STATS_LVL <= this_level {
-            let mut st = $crate::basic_store().lock().unwrap();
-            st.store($assert_id, this_level);
-        }
+    ($cond:expr, $($msg:tt)+) => {
+        $crate::__simple_assert!($cond, $crate::assertions::AssertionLevel::Slow, $($msg)+)
     };
 }
 
@@ -99,13 +130,8 @@ macro_rules! inst_assert_eq {
     ($cond:expr, $other_cond:expr) => {
         $crate::__simple_assert_eq!($cond, $other_cond, $crate::assertions::AssertionLevel::Instant)
     };
-    ($cond:expr, $other_cond:expr, $assert_id:expr) => {
-        let this_level = $crate::assertions::AssertionLevel::Instant;
-        $crate::__simple_assert_eq!($cond, $other_cond, this_level);
-        if $crate::assertions::COLLECT_STATS_LVL <= this_level {
-            let mut st = $crate::basic_store().lock().unwrap();
-            st.store($assert_id, this_level);
-        }
+    ($cond:expr, $other_cond:expr, $($msg:tt)+) => {
+        $crate::__simple_assert_eq!($cond, $other_cond, $crate::assertions::AssertionLevel::Instant, $($msg)+)
     };
 }
 
@@ -115,13 +141,8 @@ macro_rules! fast_assert_eq {
     ($cond:expr, $other_cond:expr) => {
         $crate::__simple_assert_eq!($cond, $other_cond, $crate::assertions::AssertionLevel::Fast)
     };
-    ($cond:expr, $other_cond:expr, $assert_id:expr) => {
-        let this_level = $crate::assertions::AssertionLevel::Fast;
-        $crate::__simple_assert_eq!($cond, $other_cond, this_level);
-        if $crate::assertions::COLLECT_STATS_LVL <= this_level {
-            let mut st = $crate::basic_store().lock().unwrap();
-            st.store($assert_id, this_level);
-        }
+    ($cond:expr, $other_cond:expr, $($msg:tt)+) => {
+        $crate::__simple_assert_eq!($cond, $other_cond, $crate::assertions::AssertionLevel::Fast, $($msg)+)
     };
 }
 
@@ -131,13 +152,8 @@ macro_rules! moderate_assert_eq {
     ($cond:expr, $other_cond:expr) => {
         $crate::__simple_assert_eq!($cond, $other_cond, $crate::assertions::AssertionLevel::Moderate)
     };
-    ($cond:expr, $other_cond:expr, $assert_id:expr) => {
-        let this_level = $crate::assertions::AssertionLevel::Moderate;
-        $crate::__simple_assert_eq!($cond, $other_cond, this_level);
-        if $crate::assertions::COLLECT_STATS_LVL <= this_level {
-            let mut st = $crate::basic_store().lock().unwrap();
-            st.store($assert_id, this_level);
-        }
+    ($cond:expr, $other_cond:expr, $($msg:tt)+) => {
+        $crate::__simple_assert_eq!($cond, $other_cond, $crate::assertions::AssertionLevel::Moderate, $($msg)+)
     };
 }
 
@@ -147,13 +163,52 @@ macro_rules! slow_assert_eq {
     ($cond:expr, $other_cond:expr) => {
         $crate::__simple_assert_eq!($cond, $other_cond, $crate::assertions::AssertionLevel::Slow)
     };
-    ($cond:expr, $other_cond:expr, $assert_id:expr) => {
-        let this_level = $crate::assertions::AssertionLevel::Slow;
-        $crate::__simple_assert_eq!($cond, $other_cond, this_level);
-        if $crate::assertions::COLLECT_STATS_LVL <= this_level {
-            let mut st = $crate::basic_store().lock().unwrap();
-            st.store($assert_id, this_level);
-        }
+    ($cond:expr, $other_cond:expr, $($msg:tt)+) => {
+        $crate::__simple_assert_eq!($cond, $other_cond, $crate::assertions::AssertionLevel::Slow, $($msg)+)
+    };
+}
+
+/// Do inequality assertion with level: Instant
+#[macro_export]
+macro_rules! inst_assert_ne {
+    ($cond:expr, $other_cond:expr) => {
+        $crate::__simple_assert_ne!($cond, $other_cond, $crate::assertions::AssertionLevel::Instant)
+    };
+    ($cond:expr, $other_cond:expr, $($msg:tt)+) => {
+        $crate::__simple_assert_ne!($cond, $other_cond, $crate::assertions::AssertionLevel::Instant, $($msg)+)
+    };
+}
+
+/// Do inequality assertion with level: Fast
+#[macro_export]
+macro_rules! fast_assert_ne {
+    ($cond:expr, $other_cond:expr) => {
+        $crate::__simple_assert_ne!($cond, $other_cond, $crate::assertions::AssertionLevel::Fast)
+    };
+    ($cond:expr, $other_cond:expr, $($msg:tt)+) => {
+        $crate::__simple_assert_ne!($cond, $other_cond, $crate::assertions::AssertionLevel::Fast, $($msg)+)
+    };
+}
+
+/// Do inequality assertion with level: Moderate
+#[macro_export]
+macro_rules! moderate_assert_ne {
+    ($cond:expr, $other_cond:expr) => {
+        $crate::__simple_assert_ne!($cond, $other_cond, $crate::assertions::AssertionLevel::Moderate)
+    };
+    ($cond:expr, $other_cond:expr, $($msg:tt)+) => {
+        $crate::__simple_assert_ne!($cond, $other_cond, $crate::assertions::AssertionLevel::Moderate, $($msg)+)
+    };
+}
+
+/// Do inequality assertion with level: Slow
+#[macro_export]
+macro_rules! slow_assert_ne {
+    ($cond:expr, $other_cond:expr) => {
+        $crate::__simple_assert_ne!($cond, $other_cond, $crate::assertions::AssertionLevel::Slow)
+    };
+    ($cond:expr, $other_cond:expr, $($msg:tt)+) => {
+        $crate::__simple_assert_ne!($cond, $other_cond, $crate::assertions::AssertionLevel::Slow, $($msg)+)
     };
 }
 

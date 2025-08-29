@@ -17,7 +17,6 @@ fn main() {
     fast_assert!(true);
     moderate_assert!(true);
     slow_assert!(true);
-    println!("Hello, world!");
 
     let t: Option<u32> = None;
     let tt: Result<u32, ()> = Err(());
